@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBSERVATORY — MSOS-FEDERATION-ROOT</title>
+  <title>◉ OBSERVATORY — MSOS-FEDERATION-ROOT</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -13,28 +13,6 @@
       font-family: 'Courier New', monospace; 
       margin: 0; 
       line-height: 1.6;
-    }
-    .nav-bar { 
-      display: flex; 
-      justify-content: center; 
-      gap: 24px; 
-      padding: 16px; 
-      background: #111; 
-      border-bottom: 1px solid #c8a04e; 
-      flex-wrap: wrap;
-    }
-    .nav-bar a { 
-      color: #c8a04e; 
-      text-decoration: none; 
-      font-size: 14px; 
-      letter-spacing: 2px; 
-      padding: 8px 16px; 
-      border: 1px solid transparent; 
-      transition: all 0.3s ease; 
-    }
-    .nav-bar a:hover, .nav-bar a.active { 
-      border: 1px solid #c8a04e; 
-      background: rgba(200, 160, 78, 0.1);
     }
     .container { 
       max-width: 1200px; 
@@ -48,6 +26,7 @@
       border-bottom: 1px solid #c8a04e; 
       padding-bottom: 8px; 
       text-transform: uppercase;
+      margin-top: 0;
     }
     .layer { 
       margin-bottom: 48px; 
@@ -93,18 +72,27 @@
 </head>
 <body>
 
-  <nav class="nav-bar">
-    <a href="index.html">&#9670; APERTURE</a>
-    <a href="federation-root-unified.html">⚡ FEDERATION</a>
-    <a href="observatory.html" class="active">◉ OBSERVATORY</a>
-    <a href="absolute-news.html">◈ ABSOLUTE</a>
-    <a href="graphs.html">📊 GRAPHS</a>
-  </nav>
-
   <div class="container">
     <h1>◉ OBSERVATORY — SATELLITE SUBSTRATE MONITORING</h1>
     
-    <!-- LAYER I: WINDY -->
+    <!-- LAYER — Live Map Feed (Windy.app Map Widget) -->
+    <div class="layer">
+      <div class="layer-label">Layer V — Live Interactive Scalar Field Map</div>
+
+      <div class="windy-map-wrapper" style="border: 1px solid #c8a04e; border-radius: 4px; overflow: hidden; background: #111;">
+        <div
+          style="height:600px;"
+          data-windywidget="map"
+          data-thememode="dark"
+          data-spotid="121220"
+          data-appid="widgets_4deeca9771">
+        </div>
+      </div>
+
+      <div class="scalar-note">Live spatial atmospheric map feed. χ(C) ≈ 0.81</div>
+    </div>
+
+    <!-- LAYER I: WINDY EMBED -->
     <div class="layer">
       <div class="layer-label">Layer I — Windy.com (Live Atmospheric Scalar Field)</div>
       <iframe src="https://embed.windy.com/embed2.html?lat=32.7157&lon=-117.1611&zoom=9&level=surface&overlay=satellite&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=32.7157&detailLon=-117.1611&metricWind=default&metricTemp=default&radarRange=-1" allowfullscreen title="Windy Satellite Overlay"></iframe>
@@ -135,16 +123,17 @@
 
   </div>
 
+  <!-- Async Windy Map Loader Script -->
+  <script async="true" data-cfasync="false" type="text/javascript" src="https://windy.app/widget3/windy_map_async.js?v415"></script>
+
+  <!-- Leaflet Map Script for NASA GIBS -->
   <script>
-    // Initialize Leaflet Map focused on San Diego
     var map = L.map('gibs-map').setView([32.7157, -117.1611], 9);
 
-    // Dynamically calculate yesterday's date (YYYY-MM-DD) for reliable GIBS tile availability
     var today = new Date();
     today.setDate(today.getDate() - 1);
     var dateStr = today.toISOString().split('T')[0];
 
-    // NASA GIBS WMTS Layer
     var gibsUrl = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/' + dateStr + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg';
 
     L.tileLayer(gibsUrl, {
